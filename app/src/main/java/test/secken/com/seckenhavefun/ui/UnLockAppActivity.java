@@ -16,18 +16,20 @@ import android.widget.TextView;
 
 import com.secken.sdk.SeckenCode;
 import com.secken.sdk.SeckenSDK;
+import com.secken.sdk.toolbox.SeckenHandler;
 import com.secken.sdk.ui.SeckenUISDK;
 import com.secken.sdk.util.ToastUtils;
 
 import app.secken.com.lib.FaceVertifyActivity;
 import app.secken.com.lib.VoiceVertifyActivity;
+import test.secken.com.seckenhavefun.BaseApplication;
 import test.secken.com.seckenhavefun.R;
 import test.secken.com.seckenhavefun.utils.AccountManager;
 
 public class UnLockAppActivity extends BaseActivity implements View.OnClickListener {
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new SeckenHandler(this) {
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle;
@@ -105,8 +107,7 @@ public class UnLockAppActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void accountVerifySuccess() {
-        setResult(RESULT_OK);
-        SeckenUISDK.setHandler(null);
+        ((BaseApplication) getApplication()).mLockAppUtil.unLockAppSuccess(this);
         finish();
     }
 

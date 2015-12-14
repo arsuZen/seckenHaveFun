@@ -8,8 +8,8 @@ android {
         applicationId "test.secken.com.seckenhavefun"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
 
         buildConfigField("String", "SECKEN_SDK_APP_ID", "\"${secken_sdk_app_id}\"")
         buildConfigField("String", "SECKEN_SDK_APP_KEY", "\"${secken_sdk_app_key}\"")

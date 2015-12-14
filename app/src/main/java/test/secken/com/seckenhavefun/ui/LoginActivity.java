@@ -18,6 +18,7 @@ import com.secken.sdk.SeckenSDK;
 import com.secken.sdk.entity.AuthInfo;
 import com.secken.sdk.entity.ErrorInfo;
 import com.secken.sdk.toolbox.RequestListener;
+import com.secken.sdk.toolbox.SeckenHandler;
 import com.secken.sdk.ui.SeckenUISDK;
 import com.secken.sdk.util.ToastUtils;
 
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     LOGIN_TYPE loginType;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private Handler mHandler = new SeckenHandler(this) {
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle;
@@ -217,9 +218,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        SeckenUISDK.setHandler(null);
-        super.onDestroy();
-    }
 }

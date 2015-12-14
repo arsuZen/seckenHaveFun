@@ -11,6 +11,7 @@ import com.secken.sdk.entity.ErrorInfo;
 import com.secken.sdk.toolbox.RequestListener;
 import com.secken.sdk.util.ToastUtils;
 
+import test.secken.com.seckenhavefun.BaseApplication;
 import test.secken.com.seckenhavefun.utils.AccountManager;
 
 /**
@@ -18,14 +19,11 @@ import test.secken.com.seckenhavefun.utils.AccountManager;
  */
 public class BaseActivity extends AppCompatActivity {
 
-    private boolean isNeedToTriggerUnlockPage;
-    private static final int UN_LOCK_PAGE_CODE = 133;
     protected ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isNeedToTriggerUnlockPage = true;
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCancelable(false);
@@ -40,26 +38,20 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isNeedToTriggerUnlockPage && AccountManager.isLockAppEnable(this) && isTaskRoot()) {
-            Intent i = new Intent(this, UnLockAppActivity.class);
-            startActivityForResult(i, UN_LOCK_PAGE_CODE);
-            isNeedToTriggerUnlockPage = false;
+
+        final boolean isNeedUnlockPage = ((BaseApplication) getApplication()).mLockAppUtil.isNeedToLaunchUnLockPage(this);
+        ((BaseApplication) getApplication()).mLockAppUtil.activityOnResume(this);
+
+        if (isNeedUnlockPage) {
+            Intent intent = new Intent(this, UnLockAppActivity.class);
+            startActivity(intent);
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        isNeedToTriggerUnlockPage = true;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK && requestCode == UN_LOCK_PAGE_CODE) {
-            isNeedToTriggerUnlockPage = false;
-        }
+        ((BaseApplication) getApplication()).mLockAppUtil.activityOnPause(this);
     }
 
     protected void logout() {
